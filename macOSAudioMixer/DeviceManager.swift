@@ -129,9 +129,22 @@ class DeviceManager: ObservableObject {
         )
         
         var dataSize: UInt32 = 0
-        let status = AudioObjectGetPropertyDataSize(deviceID, &address, 0, nil, &dataSize)
-        // If status is successful, the property exists and the device supports streams
-        return status == kAudioHardwareNoError
+        var status = AudioObjectGetPropertyDataSize(deviceID, &address, 0, nil, &dataSize)
+        
+        guard status == kAudioHardwareNoError, dataSize > 0 else { return false }
+        
+        // Allocate buffer to hold the AudioBufferList
+        let bufferListPointer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(dataSize))
+        defer { bufferListPointer.deallocate() }
+        
+        status = AudioObjectGetPropertyData(deviceID, &address, 0, nil, &dataSize, bufferListPointer)
+        
+        guard status == kAudioHardwareNoError else { return false }
+        
+        // Cast to AudioBufferList and check mNumberBuffers
+        let bufferList = bufferListPointer.withMemoryRebound(to: AudioBufferList.self, capacity: 1) { $0.pointee }
+        
+        return bufferList.mNumberBuffers > 0
     }
     
     // Helper function to get the device's human-readable name
