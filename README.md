@@ -22,7 +22,7 @@ To use this app to its full potential (e.g., capturing system audio), you will n
 
 ## 📦 Installation
 
-1. Download the latest `macOSAudioMixer.zip` from the [Releases](https://github.com/YOUR_USERNAME/macOS_OAM/releases) page.
+1. Download the latest `macOSAudioMixer.zip` from the [Releases](https://github.com/maualkla/macosam/releases) page.
 2. Unzip the file.
 3. Drag `macOS Audio Mixer.app` to your `/Applications` folder.
 4. Open the app and grant **Microphone Permissions** when prompted.
